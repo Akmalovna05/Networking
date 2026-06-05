@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: networking-2ado
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    preDeployCommand: python manage.py migrate && python manage.py collectstatic --noinput
+    startCommand: gunicorn cloud_erp_platform.wsgi:application
+    envVars:
+      - key: DJANGO_DEBUG
+        value: "False"
