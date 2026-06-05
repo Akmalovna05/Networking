@@ -53,7 +53,7 @@ DEBUG = env_bool('DJANGO_DEBUG', True)
 
 # Hosts/domains the site can serve. Set DJANGO_ALLOWED_HOSTS in production,
 # e.g. "example.com,www.example.com,1.2.3.4".
-ALLOWED_HOSTS = env_list('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1')
+ALLOWED_HOSTS = env_list('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,networking-2ado.onrender.com')
 
 # Trusted origins for CSRF (needed behind HTTPS / a reverse proxy),
 # e.g. "https://example.com,https://www.example.com".
