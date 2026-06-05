@@ -1,0 +1,14 @@
+# Core framework
+Django==6.0.5
+
+# WSGI HTTP server for production
+gunicorn==23.0.0
+
+# Static file serving in production
+whitenoise==6.8.2
+
+# Environment variable loading from .env
+python-dotenv==1.0.1
+
+# PostgreSQL driver (production database). Safe to keep even when using SQLite.
+psycopg[binary]==3.2.3

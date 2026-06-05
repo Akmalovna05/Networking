@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Cloud ERP{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Dashboard</h2>
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card border-primary shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title text-primary"><i class="bi bi-people"></i> CRM</h5>
+                <p class="card-text">Manage customers and orders.</p>
+                <ul class="list-unstyled mb-3">
+                    <li>Customers: <strong>{{ customer_count }}</strong></li>
+                    <li>Orders: <strong>{{ order_count }}</strong></li>
+                </ul>
+                <a href="{% url 'crm:customer_list' %}" class="btn btn-outline-primary btn-sm">Customers</a>
+                <a href="{% url 'crm:order_list' %}" class="btn btn-outline-primary btn-sm">Orders</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-success shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title text-success"><i class="bi bi-box-seam"></i> ERP</h5>
+                <p class="card-text">Manage products and inventory.</p>
+                <ul class="list-unstyled mb-3">
+                    <li>Products: <strong>{{ product_count }}</strong></li>
+                </ul>
+                <a href="{% url 'erp:product_list' %}" class="btn btn-outline-success btn-sm">Products</a>
+                <a href="{% url 'erp:inventory_list' %}" class="btn btn-outline-success btn-sm">Inventory</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-warning shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title text-warning"><i class="bi bi-truck"></i> WMS</h5>
+                <p class="card-text">Manage warehouses and stock.</p>
+                <ul class="list-unstyled mb-3">
+                    <li>Warehouses: <strong>{{ warehouse_count }}</strong></li>
+                </ul>
+                <a href="{% url 'wms:warehouse_list' %}" class="btn btn-outline-warning btn-sm">Warehouses</a>
+                <a href="{% url 'wms:stock_movement_list' %}" class="btn btn-outline-warning btn-sm">Movements</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

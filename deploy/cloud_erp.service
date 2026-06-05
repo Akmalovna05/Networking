@@ -1,0 +1,25 @@
+[Unit]
+Description=Cloud ERP Platform (Gunicorn)
+After=network.target
+# If using a local PostgreSQL, also wait for it:
+# After=network.target postgresql.service
+
+[Service]
+Type=notify
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/Networking
+EnvironmentFile=/home/ubuntu/Networking/.env
+ExecStart=/home/ubuntu/Networking/venv/bin/gunicorn \
+          cloud_erp_platform.wsgi:application \
+          -c /home/ubuntu/Networking/gunicorn.conf.py
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=always
+RestartSec=3
+# Allow Gunicorn to create the socket in /run with the right permissions.
+RuntimeDirectory=cloud_erp
+KillMode=mixed
+TimeoutStopSec=5
+
+[Install]
+WantedBy=multi-user.target

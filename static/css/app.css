@@ -1,0 +1,8 @@
+/* Custom overrides for Cloud ERP Platform */
+body {
+    min-height: 100vh;
+}
+
+.card-title i {
+    margin-right: 0.25rem;
+}

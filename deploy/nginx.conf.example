@@ -1,0 +1,71 @@
+# Nginx site configuration for the Cloud ERP Platform.
+# Copy to /etc/nginx/sites-available/cloud_erp and symlink into sites-enabled:
+#   sudo cp deploy/nginx.conf.example /etc/nginx/sites-available/cloud_erp
+#   sudo ln -s /etc/nginx/sites-available/cloud_erp /etc/nginx/sites-enabled/
+#   sudo nginx -t && sudo systemctl reload nginx
+#
+# Replace your-domain.com with your real domain (or EC2 public IP).
+# After running Certbot, it will add the TLS (443) block automatically.
+
+upstream cloud_erp_app {
+    # Matches the Gunicorn bind in gunicorn.conf.py
+    server unix:/run/cloud_erp.sock;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name your-domain.com www.your-domain.com;
+
+    client_max_body_size 10M;
+
+    # Static files collected by `manage.py collectstatic`.
+    # WhiteNoise can also serve these; Nginx is faster for large sites.
+    location /static/ {
+        alias /home/ubuntu/Networking/staticfiles/;
+        access_log off;
+        expires 30d;
+        add_header Cache-Control "public";
+    }
+
+    # User-uploaded media (if used).
+    location /media/ {
+        alias /home/ubuntu/Networking/media/;
+        access_log off;
+        expires 30d;
+    }
+
+    location / {
+        proxy_pass http://cloud_erp_app;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect off;
+    }
+}
+
+# ---------------------------------------------------------------------------
+# After Certbot runs (sudo certbot --nginx), it injects an HTTPS server block
+# similar to the following and redirects HTTP -> HTTPS automatically:
+#
+# server {
+#     listen 443 ssl http2;
+#     server_name your-domain.com www.your-domain.com;
+#
+#     ssl_certificate     /etc/letsencrypt/live/your-domain.com/fullchain.pem;
+#     ssl_certificate_key /etc/letsencrypt/live/your-domain.com/privkey.pem;
+#     include /etc/letsencrypt/options-ssl-nginx.conf;
+#     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+#
+#     location /static/ { alias /home/ubuntu/Networking/staticfiles/; }
+#     location /media/  { alias /home/ubuntu/Networking/media/; }
+#     location / {
+#         proxy_pass http://cloud_erp_app;
+#         proxy_set_header Host $host;
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header X-Forwarded-Proto $scheme;
+#     }
+# }
+# ---------------------------------------------------------------------------
