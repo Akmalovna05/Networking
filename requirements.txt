@@ -11,4 +11,4 @@ whitenoise==6.8.2
 python-dotenv==1.0.1
 
 # PostgreSQL driver (production database). Safe to keep even when using SQLite.
-psycopg[binary]==3.2.3
+psycopg[binary]==3.2.13
